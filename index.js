@@ -2,14 +2,16 @@ const config = require('./config');
 const utils = require('./utils')
 const express = require('express');
 const http = require('http')
-const walk = require('walk');
 const fs = require('fs');
 const path = require('path');
 const dirtree = require('directory-tree');
+const chokidar = require('chokidar');
 
 let app = express();
 let server = http.Server(app);
 server.listen(config.port, config.host);
+
+const io = require('socket.io')(server);
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -18,10 +20,35 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use('/', express.static(path.join(__dirname, 'gui/dist')));
 app.use('/files', express.static(config.files));
 
 app.get('/info', function(req, res) {
   let tree = dirtree(config.files, { extensions:/\.md$/ });
   utils.rmPath(tree);
   res.json(tree.children);
+});
+
+function getRoot() {
+  return config.files[config.files.length-1] != '/' ? config.files+'/' : config.files;
+}
+
+io.on('connection', function (socket) {
+  let watcher = chokidar.watch(config.files, {
+    ignored: /(^|[\/\\])\../,
+    persistent: true
+  });
+
+  watcher.on('change', (path, stats) => {
+    let file_path = path.replace(getRoot(), '');
+     socket.emit('file-change', file_path);
+  });
+
+  // watcher.on('addDir', (path) => {
+  //   console.log(path);
+  // });
+  //
+  // watcher.on('unlinkDir', (path) => {
+  //   console.log(path);
+  // });
 });

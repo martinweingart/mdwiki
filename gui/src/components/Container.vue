@@ -1,17 +1,9 @@
 <template>
   <div>
-    <section class="hero">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            MD Wiki
-          </h1>
-          <h2 class="subtitle">
-            Node.js Markdown Wiki
-          </h2>
-        </div>
-      </div>
-    </section>
+    <div class="notification">
+      <h1 class="title">MD Wiki</h1>
+      <h2 class="subtitle">Node.js Markdown Wiki</h2>
+    </div>
 
     <section class="section">
       <div class="columns">
@@ -40,6 +32,7 @@
 <script>
 import * as axios from 'axios';
 import * as Markdown from '../utils/Markdown';
+import { socket } from '../utils/Socket';
 import TreeItem from '@/components/TreeItem';
 
 export default {
@@ -48,6 +41,7 @@ export default {
     return {
       contenido: '',
       entrada: {
+        path: '',
         nombre: '',
         contenido: ''
       },
@@ -66,12 +60,19 @@ export default {
          .then(r => {
            this.dirtree = r.data;
          });
+
+    socket.on('file-change', file => {
+      if (file == this.entrada.path) {
+        this.selectItem(file);
+      }
+    });
   },
 
   methods: {
     selectItem: function(path) {
       axios.get(`http://localhost:3000/files/${path}`)
            .then(r => {
+             this.entrada.path = path;
              this.entrada.nombre = path.substring(path.lastIndexOf('/') + 1, path.length-3);
              this.entrada.contenido = Markdown.parse(r.data);
            })

@@ -1,6 +1,6 @@
 <template>
   <li>
-    <a @click="select" :class="{ 'is-active': open }">{{ item.name }}</a>
+    <a @click="select"><span v-if="hasChildren">{{ open ? '-' : '+' }}</span> {{ item.name }}</a>
     <ul v-if="hasChildren" v-show="open" class="menu-list">
         <tree-item
           v-for="(child, i) in item.children"
@@ -17,7 +17,7 @@
 export default {
   name: 'tree-item',
 
-  props: ['item'],
+  props: ['item', 'selected'],
 
   data () {
     return {
