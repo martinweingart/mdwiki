@@ -1,0 +1,22 @@
+{
+  "name": "mdwiki",
+  "version": "1.0.0",
+  "description": "Node.js simple wiki with Markdown",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node_modules/nodemon/bin/nodemon.js index.js"
+  },
+  "keywords": [
+    "node",
+    "wiki",
+    "markdown"
+  ],
+  "author": "Martín Weingart",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "directory-tree": "^2.0.0",
+    "express": "^4.15.3",
+    "walk": "^2.3.9"
+  }
+}
