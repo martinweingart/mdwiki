@@ -23,8 +23,8 @@ app.use(function(req, res, next) {
 app.use('/', express.static(path.join(__dirname, 'gui/dist')));
 app.use('/files', express.static(config.files));
 
-app.get('/info', function(req, res) {
-  let tree = dirtree(config.files, { extensions:/\.md$/ });
+app.get('/directory', function(req, res) {
+  let tree = dirtree(config.files, { extensions:/\.md$/, exclude:/\.git/ });
   utils.rmPath(tree);
   res.json(tree.children);
 });
@@ -44,11 +44,19 @@ io.on('connection', function (socket) {
      socket.emit('file-change', file_path);
   });
 
-  // watcher.on('addDir', (path) => {
-  //   console.log(path);
-  // });
-  //
-  // watcher.on('unlinkDir', (path) => {
-  //   console.log(path);
-  // });
+  watcher.on('addDir', (path) => {
+    socket.emit('dir-change');
+  });
+
+  watcher.on('unlinkDir', (path) => {
+    socket.emit('dir-change');
+  });
+
+  watcher.on('add', (path) => {
+    socket.emit('dir-change');
+  });
+
+  watcher.on('unlink', (path) => {
+    socket.emit('dir-change');
+  });
 });
