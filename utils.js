@@ -10,11 +10,11 @@ module.exports.writeJson = function(file, json) {
   });
 }
 
-function rmPath(object) {
-  delete(object.path);
+function rmPath(object, rm) {
+  object.path = object.path.replace(rm, '');
   if (object.children && object.children.length) {
     object.children.forEach(o => {
-      rmPath(o);
+      rmPath(o, rm);
     });
   }
 }
