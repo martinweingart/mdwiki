@@ -1,12 +1,13 @@
 <template>
   <li>
-    <a @click="select"><span v-if="hasChildren">{{ open ? '-' : '+' }}</span> {{ item.name }}</a>
+    <a @click="select" :class="{'is-active': item.path == selected }"><span v-if="hasChildren">{{ open ? '-' : '+' }}</span> {{ item.name }}</a>
     <ul v-if="hasChildren" v-show="open" class="menu-list">
         <tree-item
           v-for="(child, i) in item.children"
           :item="child"
           :key="i"
-          @select="selectChild">
+          @select="selectChild"
+          :selected="selected">
         </tree-item>
       </ul>
   </li>

@@ -6,7 +6,10 @@
     </div>
 
     <section>
-      <search @search="search" :results="results"></search>
+      <search v-show="show_search" @search="search" :results="results" @select="selectSearch"></search>
+      <i :class="{'fa fa-chevron-up': show_search, 'fa fa-chevron-down': !show_search}"
+          @click="show_search = !show_search"
+          style="cursor:pointer;width:100%;text-align:center;margin-top:10px"></i>
     </section>
 
     <section class="section">
@@ -18,7 +21,7 @@
               Entradas
             </p>
             <ul class="menu-list" v-for="item in dirtree">
-              <tree-item :item="item" @select="selectItem"></tree-item>
+              <tree-item :item="item" @select="selectItem" :selected="itemSelected"></tree-item>
             </ul>
           </aside>
         </div>
@@ -51,7 +54,9 @@ export default {
         contenido: ''
       },
       dirtree: {},
-      results: []
+      results: [],
+      itemSelected: '',
+      show_search: true
     }
   },
 
@@ -89,6 +94,7 @@ export default {
     selectItem: function(path) {
       axios.get(`http://localhost:3001/files/${path}`)
            .then(r => {
+             this.itemSelected = path;
              this.entrada.path = path;
              this.entrada.nombre = path.substring(path.lastIndexOf('/') + 1, path.length-3);
              this.entrada.contenido = Markdown.parse(r.data);
@@ -96,7 +102,18 @@ export default {
     },
 
     search: function(search_text) {
+      axios.post(`http://localhost:3001/search`, { search: search_text })
+           .then(r => {
+             this.results = r.data;
+           })
+    },
 
+    closeAll: function() {
+
+    },
+
+    selectSearch: function(item) {
+      this.selectItem(item);
     }
   },
 
