@@ -53,11 +53,11 @@ app.post('/search', function(req, res) {
   });
   Promise.all(proms_find_infiles)
          .then(rs => {
-           files = _.union(rs.map(e => Object.keys(e))[0]);
+           files = _.intersection(...rs.map(e => Object.keys(e)));
            Promise.all(proms_find)
                   .then(r => {
-                    results = _.union(r);
-                    files = _.union(files, results[0]);
+                    results = _.intersection(...r);
+                    files = _.union(files, results);
                     res.json(files.map(n => n.replace(getRoot(), '')));
                   });
          })

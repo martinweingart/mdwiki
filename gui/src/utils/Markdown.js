@@ -7,12 +7,17 @@ renderer.heading = function (text, level) {
 };
 
 renderer.table = function (header, body) {
-  return `<table class="table table-bordered">${header}${body}</table>`;
+  return `<table class="table table-bordered"><thead>${header}</thead></tbody>${body}</tbody></table>`;
 };
 
 renderer.blockquote = function (text) {
   return `<blockquote>${text}</blockquote>`
 };
+
+renderer.list = function (body, ordered) {
+  return `<ul style="list-style: initial; list-style-type: ${ordered ? 'decimal' : 'circle'}">${body}</ul>`;
+};
+
 
 export function parse(text) {
   return marked(text, {
