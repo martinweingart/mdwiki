@@ -1,2 +1,3 @@
 import * as io from '../../../node_modules/socket.io-client';
-export const socket = io.connect('http://localhost:3001');
+import { Config } from '../Config';
+export const socket = io.connect(`http://${Config.host}:${Config.port}`);
