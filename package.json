@@ -20,10 +20,15 @@
     "express": "^4.15.3",
     "find": "^0.2.7",
     "find-in-files": "^0.4.0",
+    "gulp": "^3.9.1",
+    "gulp-replace-task": "^0.11.0",
     "lodash": "^4.17.4",
+    "minimist": "^1.2.0",
     "socket.io": "^2.0.3"
   },
   "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-replace-task": "^0.11.0",
     "nodemon": "^1.11.0"
   }
 }
