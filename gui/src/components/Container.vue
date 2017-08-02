@@ -41,6 +41,7 @@
 import * as axios from 'axios';
 import * as Markdown from '../utils/Markdown';
 import { socket } from '../utils/Socket';
+import { Config } from '../Config';
 import TreeItem from '@/components/TreeItem';
 import Search from '@/components/Search';
 
@@ -88,11 +89,11 @@ export default {
 
   methods: {
     getDirTree: function() {
-      axios.get('http://localhost:3001/directory').then(r => this.dirtree = r.data);
+      axios.get(`http://${Config.host}:${Config.port}/directory`).then(r => this.dirtree = r.data);
     },
 
     selectItem: function(path) {
-      axios.get(`http://localhost:3001/files/${path}`)
+      axios.get(`http://${Config.host}:${Config.port}/files/${path}`)
            .then(r => {
              this.itemSelected = path;
              this.entrada.path = path;
@@ -102,7 +103,7 @@ export default {
     },
 
     search: function(search_text) {
-      axios.post(`http://localhost:3001/search`, { search: search_text })
+      axios.post(`http://${Config.host}:${Config.port}/search`, { search: search_text })
            .then(r => {
              this.results = r.data;
            })
