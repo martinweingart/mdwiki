@@ -1,4 +1,4 @@
 export const Config = {
-  host: '192.168.0.8',
+  host: 'localhost',
   port: 3001
 }
