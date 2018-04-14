@@ -1,4 +1,4 @@
-const config = require('./config');
+const config = require('./config.json');
 const utils = require('./utils')
 const express = require('express');
 const http = require('http')

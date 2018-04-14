@@ -64,7 +64,9 @@ export default {
   filters: {
     titulo: function(name) {
       let m_name = name.replace('_', ' ');
-      return m_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+      return name.split('_')
+                .map(w => w.charAt(0).toUpperCase() + w.substr(1).toLowerCase())
+                .join(' ');
     }
   },
 
