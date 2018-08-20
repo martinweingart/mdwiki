@@ -14,6 +14,7 @@ Crear archivo config.private con el siguiente formato:
   "files": "/dir/con/archivos"
 }
 `
+
 ## TODO
 
 - No funcionan bien las listas. Bulma modifica las clases de 'ul' y 'li'

@@ -4,7 +4,8 @@
   "description": "Node.js simple wiki with Markdown",
   "main": "index.js",
   "scripts": {
-    "serve": "node_modules/nodemon/bin/nodemon.js index.js"
+    "serve": "node_modules/nodemon/bin/nodemon.js index.js",
+    "build": "sh deploy.sh"
   },
   "keywords": [
     "node",
@@ -14,21 +15,16 @@
   "author": "Martín Weingart",
   "license": "GPL-3.0",
   "dependencies": {
-    "body-parser": "^1.17.2",
+    "body-parser": "^1.18.3",
     "chokidar": "^1.7.0",
     "directory-tree": "^2.0.0",
-    "express": "^4.15.3",
+    "express": "^4.16.3",
     "find": "^0.2.7",
     "find-in-files": "^0.4.0",
-    "gulp": "^3.9.1",
-    "gulp-replace-task": "^0.11.0",
-    "lodash": "^4.17.4",
-    "minimist": "^1.2.0",
-    "socket.io": "^2.0.3"
+    "lodash": "^4.17.10",
+    "socket.io": "^2.1.1"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-replace-task": "^0.11.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.18.3"
   }
 }
