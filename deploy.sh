@@ -38,8 +38,7 @@ export const Config = {
 }
 EOM
 
-(cd gui;npm install)
-(cd gui;npm run build)
+(cd gui;npm install;npm run build)
 
 #Verifico si la variable WEBAPP no es vacía, reemplazar dirección en index.html
 if [ -n "$WEBAPP" ]; then

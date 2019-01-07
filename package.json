@@ -22,6 +22,7 @@
     "find": "^0.2.7",
     "find-in-files": "^0.4.0",
     "lodash": "^4.17.10",
+    "replace-in-file": "^3.4.2",
     "socket.io": "^2.1.1"
   },
   "devDependencies": {

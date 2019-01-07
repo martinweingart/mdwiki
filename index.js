@@ -1,8 +1,7 @@
-const config = require('./config.json');
+const config = require('./config.js');
 const utils = require('./utils')
 const express = require('express');
 const http = require('http')
-const fs = require('fs');
 const path = require('path');
 const dirtree = require('directory-tree');
 const chokidar = require('chokidar');
@@ -10,10 +9,26 @@ const find_files = require('find-in-files');
 const find = require('find');
 const _ = require('lodash');
 const body_parser = require('body-parser')
+const replace = require('replace-in-file')
 
 let app = express();
 let server = http.Server(app);
-server.listen(config.port, config.host);
+let config_files = config.files || '/files';
+
+if (process.env.host)  {
+  try {
+    replace.sync({
+      files: 'gui/dist/static/js/*.js',
+      from: /host:".+",port/g,
+      to: `host:"${process.env.host}",port`,
+    });
+
+    console.log('Hostname configurado correctamente!');
+  }
+  catch (e) {
+    console.error('Error configurando hostname:', e);
+  }  
+}
 
 const io = require('socket.io')(server);
 
@@ -26,10 +41,10 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', express.static(path.join(__dirname, 'gui/dist')));
-app.use('/files', express.static(config.files));
+app.use('/files', express.static(config_files));
 
 app.get('/directory', function(req, res) {
-  let tree = dirtree(config.files, { extensions:/\.md$/, exclude:/\.git/ });
+  let tree = dirtree(config_files, { extensions:/\.md$/, exclude:/\.git/ });
   utils.rmPath(tree, getRoot());
   res.json(tree.children);
 });
@@ -37,7 +52,7 @@ app.get('/directory', function(req, res) {
 function findFiles(w) {
   return new Promise(function(resolve, reject) {
     let patt = new RegExp(w, "i");
-    find.file(patt, config.files, function(files) {
+    find.file(patt, config_files, function(files) {
       resolve(files.filter(f => f.indexOf('.git')  == -1));
     })
   });
@@ -49,7 +64,7 @@ app.post('/search', function(req, res) {
   let proms_find_infiles = [];
   words.forEach(w => {
     proms_find.push(findFiles(w));
-    proms_find_infiles.push(find_files.find({'term': w, 'flags': 'ig'}, config.files, '.md$'))
+    proms_find_infiles.push(find_files.find({'term': w, 'flags': 'ig'}, config_files, '.md$'))
   });
   Promise.all(proms_find_infiles)
          .then(rs => {
@@ -64,11 +79,11 @@ app.post('/search', function(req, res) {
 });
 
 function getRoot() {
-  return config.files[config.files.length-1] != '/' ? config.files+'/' : config.files;
+  return config_files[config_files.length-1] != '/' ? config_files+'/' : config_files;
 }
 
 io.on('connection', function (socket) {
-  let watcher = chokidar.watch(config.files, {
+  let watcher = chokidar.watch(config_files, {
     ignored: /(^|[\/\\])\../,
     persistent: true
   });
@@ -94,3 +109,5 @@ io.on('connection', function (socket) {
     socket.emit('dir-change');
   });
 });
+
+server.listen(config.port, config.host, () => console.log('MDWiki en ejecución...'));
