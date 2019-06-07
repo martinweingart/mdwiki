@@ -16,6 +16,7 @@ La wiki es actualizada instantáneamente al momento de modificar los archivos y/
 ## Clonar Proyecto
 
 `git clone https://github.com/argnu/mdwiki`
+
 `cd mdwiki`
 
 ## Configuración
