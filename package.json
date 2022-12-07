@@ -15,10 +15,10 @@
   "author": "Martín Weingart",
   "license": "GPL-3.0",
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.20.1",
     "chokidar": "^1.7.0",
     "directory-tree": "^2.0.0",
-    "express": "^4.16.3",
+    "express": "^4.18.2",
     "find": "^0.2.7",
     "find-in-files": "^0.4.0",
     "lodash": "^4.17.10",
